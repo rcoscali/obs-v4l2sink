@@ -3,7 +3,9 @@ project(obs-v4l2sink)
 
 
 include(external/FindLibObs.cmake)
+#find_package(PkgConfig)
 find_package(LibObs REQUIRED)
+#pkg_check_modules(LIBSMDE libsmde REQUIRED)
 
 set(CMAKE_PREFIX_PATH "${QTDIR}")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -34,16 +36,19 @@ target_link_libraries(v4l2sink
 	Qt5::Core
 	Qt5::Widgets)
 
-if(ARCH EQUAL 64)
-	set(ARCH_NAME "x86_64")
-else()
-	set(ARCH_NAME "i686")
-endif()
-
 set_target_properties(v4l2sink PROPERTIES PREFIX "")
 
-install(TARGETS v4l2sink
-	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/obs-plugins)
+if(ARCH EQUAL 64)
+	set(ARCH_NAME "x86_64")
+	install(TARGETS v4l2sink
+		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/x86_64-linux-gnu/obs-plugins)
+else()
+	set(ARCH_NAME "i686")
+	install(TARGETS v4l2sink
+		LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/obs-plugins)
+endif()
+
+
 
 install(DIRECTORY locale/
 	DESTINATION "${CMAKE_INSTALL_PREFIX}/share/obs/obs-plugins/v4l2sink/locale")
